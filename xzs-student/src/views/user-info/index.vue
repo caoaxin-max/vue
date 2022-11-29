@@ -1,0 +1,268 @@
+<template>
+  <div style="margin-top: 10px" class="app-contain">
+    <el-row :gutter="50">
+      <el-col :span="7">
+        <el-card>
+          <div slot="header" class="clearfix">
+            <span>个人信息</span>
+          </div>
+          <el-row style="text-align: center">
+            <el-upload
+              :http-request="updateFile"
+              action=""
+              accept=".jpg,.png"
+              :show-file-list="false"
+              :on-success="uploadSuccess"
+            >
+              <el-avatar
+                class="el-dropdown-avatar"
+                :size="100"
+                :src="
+                  form.imagePath === null
+                    ? require('@/assets/avatar.png')
+                    : form.imagePath
+                "
+              ></el-avatar>
+            </el-upload>
+          </el-row>
+          <el-row class="user-info-userName">
+            <label>{{ form.userName }}</label>
+          </el-row>
+          <el-divider />
+          <el-row class="user-info-fullInfo">
+            <label>姓名：{{ form.realName }}</label
+            ><br />
+            <label>年级：{{ levelFormatter(form.userLevel) }}</label>
+            <el-button
+              style="margin-left: 10px"
+              type="primary"
+              icon="el-icon-plus"
+              circle
+              size="mini"
+              @click="open"
+              v-if="form.className != null ? false : true"
+            ></el-button
+            ><br />
+            <label v-if="form.className == null ? false : true"
+              >班级：{{ form.className }}</label
+            ><br v-if="form.className == null ? false : true" />
+            <label>注册时间：{{ form.createTime }}</label
+            ><br />
+          </el-row>
+        </el-card>
+      </el-col>
+      <el-col :span="17">
+        <el-card shadow="hover">
+          <el-tabs active-name="event" type="card">
+            <el-tab-pane label="用户动态" name="event">
+              <div class="block">
+                <el-timeline>
+                  <el-timeline-item
+                    :timestamp="item.createTime"
+                    placement="top"
+                    :key="item.id"
+                    v-for="item in event"
+                  >
+                    <el-card>
+                      <p>{{ item.content }}</p>
+                    </el-card>
+                  </el-timeline-item>
+                </el-timeline>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane label="个人资料修改" name="update">
+              <el-form
+                :model="form"
+                ref="form"
+                label-width="100px"
+                v-loading="formLoading"
+                :rules="rules"
+              >
+                <el-form-item label="真实姓名：" prop="realName" required>
+                  <el-input v-model="form.realName"></el-input>
+                </el-form-item>
+                <el-form-item label="年龄：">
+                  <el-input v-model="form.age"></el-input>
+                </el-form-item>
+                <el-form-item label="性别：">
+                  <el-select v-model="form.sex" placeholder="性别" clearable>
+                    <el-option
+                      v-for="item in sexEnum"
+                      :key="item.key"
+                      :value="item.key"
+                      :label="item.value"
+                    ></el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="出生日期：">
+                  <el-date-picker
+                    v-model="form.birthDay"
+                    value-format="yyyy-MM-dd"
+                    type="date"
+                    placeholder="选择日期"
+                  />
+                </el-form-item>
+                <el-form-item label="手机：">
+                  <el-input v-model="form.phone"></el-input>
+                </el-form-item>
+                <el-form-item label="年级：" prop="userLevel" required>
+                  <el-select v-model="form.userLevel" placeholder="年级">
+                    <el-option
+                      v-for="item in levelEnum"
+                      :key="item.key"
+                      :value="item.key"
+                      :label="item.value"
+                    ></el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item>
+                  <el-button type="primary" @click="submitForm">更新</el-button>
+                </el-form-item>
+              </el-form>
+            </el-tab-pane>
+          </el-tabs>
+        </el-card>
+      </el-col>
+    </el-row>
+  </div>
+</template>
+
+<script>
+import userApi from "@/api/user";
+import { mapGetters, mapState } from "vuex";
+
+export default {
+  data() {
+    return {
+      event: [],
+      form: {
+        userName: "",
+        realName: "",
+        age: "",
+        sex: "",
+        birthDay: null,
+        phone: null,
+        userLevel: null,
+        className: null,
+        createTime: null,
+        imagePath: null,
+        command: "",
+      },
+      formLoading: false,
+      rules: {
+        realName: [
+          { required: true, message: "请输入真实姓名", trigger: "blur" },
+        ],
+        userLevel: [
+          { required: true, message: "请选择年级", trigger: "change" },
+        ],
+      },
+    };
+  },
+  created() {
+    this.getUserEventLog();
+    this.getCurrentUser();
+  },
+  methods: {
+    open() {
+      this.$prompt("请输入口令","口令", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+      })
+        .then(({ value }) => {
+          console.log(value)
+          this.form.command = value;
+          if(this.command != ''){
+            userApi.addClass(this.form).then((re) => {
+            if (re.code == 200) {
+              this.getCurrentUser();
+              this.$message({
+                type: "success",
+                message: "加入班级成功",
+              });
+            } else {
+              this.$message.error(re.message);
+            }
+          });
+          }else{
+            this.$message.error("口令不能为空");
+          }
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "取消输入",
+          });
+        });
+    },
+    getUserEventLog() {
+      userApi.getUserEvent().then((re) => {
+        // console.log(re)
+        this.event = re.data;
+      });
+    },
+    getCurrentUser() {
+      userApi.getCurrentUser().then((re) => {
+        // console.log(re);
+        this.form = re.data;
+      });
+    },
+    updateFile(params) {
+      let formData = new FormData();
+      formData.append("file", params.file);
+      // console.log(params);
+      userApi
+        .updateImage(formData)
+        .then((re) => {
+          this.form.imagePath = re.data.accordingUrl;
+          this.$message.success(re.data.message);
+        })
+        .catch((e) => {
+          this.$message.error(re.data.message);
+        });
+    },
+    uploadSuccess(re, file) {
+      if (re.code === 200) {
+        window.location.reload();
+      } else {
+        this.$message.error(re.message);
+      }
+    },
+    submitForm() {
+      let _this = this;
+      this.$refs.form.validate((valid) => {
+        if (valid) {
+          this.formLoading = true;
+          userApi
+            .update(this.form)
+            .then((data) => {
+              if (data.code === 200) {
+                _this.$message.success(data.message);
+              } else {
+                _this.$message.error(data.message);
+              }
+              _this.formLoading = false;
+            })
+            .catch((e) => {
+              _this.formLoading = false;
+            });
+        } else {
+          return false;
+        }
+      });
+    },
+    levelFormatter(level) {
+      return this.enumFormat(this.levelEnum, level);
+    },
+  },
+  computed: {
+    ...mapGetters("enumItem", ["enumFormat"]),
+    ...mapState("enumItem", {
+      sexEnum: (state) => state.user.sexEnum,
+      levelEnum: (state) => state.user.levelEnum,
+    }),
+  },
+};
+</script>
+
+<style lang="scss" scoped></style>
