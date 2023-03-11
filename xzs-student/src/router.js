@@ -45,6 +45,18 @@ const router = new Router({
       ]
     },
     {
+      path: '/analyse',
+      component: Layout,
+      children: [
+        {
+          path: 'index',
+          component: () => import('@/views/analyse/index'),
+          name: 'AnalyseIndex',
+          meta: {title: '考试分析'}
+        },
+      ]
+    },
+    {
       path: '/question',
       component: Layout,
       children: [
