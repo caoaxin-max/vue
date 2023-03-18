@@ -18,6 +18,8 @@
 <script>
 import * as echarts from 'echarts';
 import analyseApi from "@/api/analyse";
+import Cookies from 'js-cookie';
+
 export default {
   data() {
     return{
@@ -25,6 +27,7 @@ export default {
       xAxisData:[],
       series:[],
       nowMonth: new Date(),
+      currentUser: null,
     }
   },
   watch: {
@@ -35,14 +38,21 @@ export default {
     }
   },
   created() {
+    let temp = Cookies.get("adminUserInfo");
+    this.currentUser = JSON.parse(temp);
+    console.log(this.currentUser);
   },
   mounted() {
     this.initEcharts();
   },
   methods: {
     initEcharts(){
+      let pa = {
+        nowMonth: this.nowMonth,
+        currentUser: this.currentUser
+      }
       var myChart = echarts.init(document.getElementById("echarts_box"));
-      analyseApi.getAnalyse(this.nowMonth).then(data => {
+      analyseApi.getAnalyse(pa).then(data => {
         if (data.code === 200){
           let analyseDate = data.data;
           this.legendData = [];

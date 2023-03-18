@@ -10,12 +10,15 @@ import "@/styles/index.scss"; // global css
 import "./icons"; // icon
 import NProgress from "nprogress"; // progress bar
 import "nprogress/nprogress.css"; // progress bar style
+import * as echarts from 'echarts';
 
 	//引入 导出Excel vue-json-excel
 Vue.use(Element, {
   size: "medium", // set element-ui default size
 });
 
+
+Vue.prototype.$echarts = echarts
 
 Vue.config.productionTip = false;
 

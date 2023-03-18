@@ -85,7 +85,7 @@ const get = function (url, params) {
     withCredentials: true,
     timeout: 30000,
     params: params,
-    headers: { 'request-ajax': true }
+    headers: { 'request-ajax': true,'Authorization':'Bearer ' + Cookies.get('Authorization') }
   }
   return request(false, query)
 }
