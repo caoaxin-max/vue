@@ -44,6 +44,19 @@ import userApi from '@/api/user'
 
 export default {
   data () {
+    let validateUnque = (rule, value, callback) => {
+      if(this.userNameBk != value){
+        userApi.checkUnique(this.form.userName).then(res => {
+          if(res.code === 506){
+            callback(res.message);
+          }else{
+            callback();
+          }
+        })
+      }else{
+        callback();
+      }
+    };
     return {
       form: {
         id: null,
@@ -57,10 +70,12 @@ export default {
         birthDay: null,
         phone: null
       },
+      userNameBk: '',
       formLoading: false,
       rules: {
         userName: [
-          { required: true, message: '请输入用户名', trigger: 'blur' }
+          { required: true, message: '请输入用户名', trigger: 'blur' },
+          {validator: validateUnque, trigger: 'blur'}
         ],
         realName: [
           { required: true, message: '请输入真实姓名', trigger: 'blur' }
@@ -75,6 +90,7 @@ export default {
       _this.formLoading = true
       userApi.selectUser(id).then(re => {
         _this.form = re.data
+        _this.userNameBk = re.data.userName
         _this.formLoading = false
       })
     }

@@ -5,7 +5,9 @@
         <el-date-picker
           v-model="nowMonth"
           type="month"
-          placeholder="选择月">
+          placeholder="选择月"
+          :clearable="false"
+          :picker-options="pickerOptions">
         </el-date-picker>
       </el-col>
     </el-row>
@@ -23,6 +25,11 @@ import Cookies from 'js-cookie';
 export default {
   data() {
     return{
+      pickerOptions: {
+        disabledDate(v) {
+          return v.getTime() > new Date().getTime() - 86400000;//  - 86400000是否包括当天
+        }
+      },
       legendData:[],
       xAxisData:[],
       series:[],
@@ -38,7 +45,7 @@ export default {
     }
   },
   created() {
-    let temp = Cookies.get("adminUserInfo");
+    let temp = Cookies.get("studentUserInfo");
     this.currentUser = JSON.parse(temp);
     console.log(this.currentUser);
   },

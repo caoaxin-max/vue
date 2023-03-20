@@ -9,5 +9,6 @@ export default {
   updateUser: query => post('/api/admin/user/update', query),
   changeStatus: id => post('/api/admin/user/changeStatus/' + id),
   deleteUser: id => post('/api/admin/user/delete/' + id),
-  selectByUserName: query => post('/api/admin/user/selectByUserName', query)
+  selectByUserName: query => post('/api/admin/user/selectByUserName', query),
+  checkUnique: userName => post('/api/admin/unique/'+ userName)
 }

@@ -101,9 +101,8 @@ export default {
   },
   created () {
     this.initSubject();
-    let temp = Cookies.get("adminUserInfo");
+    let temp = Cookies.get("studentUserInfo");
     this.currentUser = JSON.parse(temp);
-    this.form.level = this.currentUser.userLevel;
   },
   watch: {
     "form.subjectId": {
@@ -119,9 +118,8 @@ export default {
   },
   methods: {
     getMaxQuestions(){
-      console.log(this.form);
       if(this.form.subjectId != 0 && this.form.difficulty != 0){
-        examPaperApi.getMaxQuestions(this.form.subjectId,this.form.difficulty,this.form.level).then(res => {
+        examPaperApi.getMaxQuestions(this.form.subjectId,this.form.difficulty,this.currentUser.userName).then(res => {
           if(res.code === 200){
             this.maxQuestions = res.data;
           }
@@ -132,7 +130,7 @@ export default {
       this.dialogVisible = true;
     },
     generateExam(){
-      examPaperApi.generateExam(this.form.difficulty, this.form.subjectId, this.form.level, this.form.numQuestions, this.currentUser.userName).then(res => {
+      examPaperApi.generateExam(this.form.difficulty, this.form.subjectId, this.form.numQuestions, this.currentUser.userName).then(res => {
           if(res.code === 200){
             this.dialogVisible = false;
             this.$message.success(res.message);

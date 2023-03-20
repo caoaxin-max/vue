@@ -34,7 +34,16 @@
           <router-link :to="{path:'/user/admin/edit', query:{id:row.id}}" class="link-left">
             <el-button size="mini">编辑</el-button>
           </router-link>
-          <el-button size="mini" type="danger"  @click="deleteUser(row)" class="link-left">删除</el-button>
+          <el-popconfirm
+            confirm-button-text='好的'
+            cancel-button-text='不用了'
+            icon="el-icon-info"
+            icon-color="red"
+            title="这是一段内容确定删除吗？"
+            @confirm="deleteUser(row)"
+          >
+          <el-button slot="reference" size="mini" type="danger" class="link-left">删除</el-button>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>

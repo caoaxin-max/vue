@@ -42,7 +42,16 @@
         <template slot-scope="{row}">
           <el-button size="mini"   @click="showQuestion(row)">预览</el-button>
           <el-button size="mini"  @click="editQuestion(row)">编辑</el-button>
-          <el-button size="mini"  type="danger" @click="deleteQuestion(row)" class="link-left">删除</el-button>
+          <el-popconfirm
+            confirm-button-text='好的'
+            cancel-button-text='不用了'
+            icon="el-icon-info"
+            icon-color="red"
+            title="这是一段内容确定删除吗？"
+            @confirm="deleteQuestion(row)"
+          >
+          <el-button slot="reference" size="mini"  type="danger" class="link-left">删除</el-button>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>

@@ -50,8 +50,8 @@
     </el-row>
     <el-row class="app-item-contain">
       <h3 class="index-title-h3">固定试卷</h3>
-      <div style="padding-left: 15px">
-        <el-col :span="4" v-for="(item, index) in fixedPaper" :key="index" :offset="index > 0 ? 1 : 0">
+      <div style="padding-left: 15px;">
+        <el-col :span="3" v-for="(item, index) in fixedPaper" :key="index" :offset="1" style="margin-bottom:30px;">
           <el-card :body-style="{ padding: '0px' }" v-loading="loading">
             <img src="@/assets/exam-paper/show1.png" class="image">
             <div style="padding: 14px;">

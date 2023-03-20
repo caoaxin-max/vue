@@ -37,7 +37,7 @@
       </el-table-column>
       <el-table-column width="270px" label="操作" align="center">
         <template slot-scope="{row}">
-          <el-button size="mini"  @click="changeStatus(row)" class="link-left">
+          <el-button size="mini"  @click.stop="changeStatus(row)" class="link-left">
             {{ statusBtnFormatter(row.status) }}
           </el-button>
           <router-link :to="{path:'/user/student/edit', query:{id:row.id}}" class="link-left">
@@ -46,7 +46,16 @@
           <router-link :to="{path:'/log/user/list', query:{userId:row.id}}" class="link-left" v-if="currentUser.role == 3">
             <el-button size="mini" >日志</el-button>
           </router-link>
-          <el-button  size="mini" type="danger" @click="deleteUser(row)" class="link-left">删除</el-button>
+          <el-popconfirm
+            confirm-button-text='好的'
+            cancel-button-text='不用了'
+            icon="el-icon-info"
+            icon-color="red"
+            title="这是一段内容确定删除吗？"
+            @confirm="deleteUser(row)"
+          >
+            <el-button slot="reference" size="mini" type="danger" @click.stop="" class="link-left">删除</el-button>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
