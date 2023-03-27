@@ -8,6 +8,9 @@
 - 基于vue-admin-template二次开发
 - wangEditor富文本编辑器
 
+### 1.1后端代码连接
+https://github.com/caoaxin-max/xzs-cloud
+
 ## 2.部署前端
 
 - 执行下面2个命令，安装node_module：
