@@ -106,7 +106,7 @@
                   <el-input v-model="form.phone"></el-input>
                 </el-form-item>
                 <el-form-item label="年级：" prop="userLevel" required>
-                  <el-select v-model="form.userLevel" placeholder="年级">
+                  <el-select v-model="form.userLevel" placeholder="年级" disabled>
                     <el-option
                       v-for="item in levelEnum"
                       :key="item.key"

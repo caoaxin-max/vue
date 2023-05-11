@@ -32,7 +32,7 @@
       </div>
     </div>
     <div class="account-foot-copyright">
-      <span>Copyright © 2022 曹阿鑫 版权所有</span>
+      <!-- <span>Copyright © 2022 曹阿鑫 版权所有</span> -->
     </div>
   </div>
 </template>

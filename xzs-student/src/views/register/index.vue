@@ -37,7 +37,7 @@
       </div>
     </div>
     <div class="account-foot-copyright">
-      <span>Copyright © 2022 曹阿鑫 版权所有</span>
+      <!-- <span>Copyright © 2022 曹阿鑫 版权所有</span> -->
     </div>
   </div>
 </template>
@@ -82,6 +82,7 @@ export default {
 </script>
 
 <style lang="scss">
+  
   .lowin-input {
     .el-input__inner {
       background-color: transparent !important;

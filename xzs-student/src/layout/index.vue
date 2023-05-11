@@ -34,7 +34,7 @@
     </el-main>
     <el-footer height="340" class="student-footer">
         <div class="foot-copyright">
-          <span>Copyright © 2022 曹阿鑫 版权所有</span>
+          <!-- <span>Copyright © 2022 曹阿鑫 版权所有</span> -->
         </div>
     </el-footer>
   </el-container>
